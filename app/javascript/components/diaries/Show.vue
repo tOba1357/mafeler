@@ -2,7 +2,7 @@
   <div>
     <h1>{{date}} Diary</h1>
     <div class="table-responsive">
-      <table class="table table-bordered table-hover">
+      <table class="table table-bordered table-hover diary-table">
         <tbody>
         <tr>
           <th>id</th>
@@ -32,7 +32,7 @@
         </tr>
         <tr>
           <th>note</th>
-          <td>{{note}}</td>
+          <td class="note">{{note}}</td>
         </tr>
         </tbody>
       </table>
@@ -101,6 +101,14 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  .diary-table {
+    tr {
+      height:  40px;
+    }
 
+    .note {
+      white-space: pre-line;
+    }
+  }
 </style>

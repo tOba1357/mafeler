@@ -5,11 +5,12 @@
       <router-link class="btn btn-primary" :to="{name: 'new_diary'}">作成</router-link>
     </h1>
     <div class="table-responsive">
-      <table class="table table-hover">
+      <table class="table table-hover diary-table">
         <thead>
         <tr>
           <th>date</th>
           <th>condition</th>
+          <th>note</th>
           <th></th>
         </tr>
         </thead>
@@ -19,6 +20,7 @@
           <td align="center">
             <DegreeIcon v-if="diary.condition" :type="diary.condition" :size="30"></DegreeIcon>
           </td>
+          <th><p class="note font-weight-light m-0">{{diary.note}}</p></th>
           <td>
             <div class="btn-group">
               <router-link class="btn btn-info btn-sm" :to="{name: 'show_diary', params: {date: diary.date}}">詳細
@@ -87,3 +89,15 @@
   }
 </script>
 
+<style lang="scss" scoped>
+  .diary-table {
+    .hr {
+      height: 30px;
+    }
+    .note {
+      white-space: pre-line;
+      height: 45px;
+      overflow: hidden;
+    }
+  }
+</style>
