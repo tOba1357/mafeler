@@ -1,11 +1,5 @@
 source 'https://rubygems.org'
 
-git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
-  "https://github.com/#{repo_name}.git"
-end
-
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '6.0.2.1'
 # Use sqlite3 as the database for Active Record
@@ -54,7 +48,6 @@ group :development, :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
 
-  gem 'annotate', git: 'https://github.com/ctran/annotate_models.git'
   gem 'binding_of_caller'
 
   gem 'pry-rails'
@@ -73,9 +66,8 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 
   gem 'better_errors'
+  gem 'annotate'
 
-
-  gem 'foreman'
 
   # deploy
   gem 'capistrano', require: false

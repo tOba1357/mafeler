@@ -25,11 +25,12 @@ html
             li.nav-item
               router-link.nav-link :to="{name: 'diaries'}" Diary
             li.nav-item
-              router-link.nav-link :to="{name: 'fitbit_sleeps'}" FitbitSleep
-            li.nav-item
-              router-link.nav-link :to="{name: 'fitbit_heart_rates'}" FitbitHeartRates
-            li.nav-item
-              router-link.nav-link :to="{name: 'fitbit_activities'}" FitbitActivities
+            li.nav-item.dropdown
+              .nav-link.dropdown-toggle.navbarDropdown role="button" data-toggle="dropdown" Fitbit
+              .dropdown-menu
+                router-link.dropdown-item(:to="{name: 'fitbit_sleeps'}" aria-labelledby="navbarDropdown") Sleep
+                router-link.dropdown-item(:to="{name: 'fitbit_heart_rates'}" aria-labelledby="navbarDropdown") HeartRates
+                router-link.dropdown-item(:to="{name: 'fitbit_activities'}" aria-labelledby="navbarDropdown") Activities
             li.nav-item
               router-link.nav-link :to="{name: 'health_planet_innerscans'}" Innerscans
             li.nav-item

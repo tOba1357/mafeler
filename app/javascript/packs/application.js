@@ -4,7 +4,6 @@ import store from '../store'
 import router from '../router'
 
 require('bootstrap')
-require('es6-promise').polyfill()
 require('../utils/rollbar')
 
 
