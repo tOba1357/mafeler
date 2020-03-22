@@ -7,7 +7,7 @@ module Fitbit
 
     def authenticate
       if fitbit_account.blank?
-        redirect_to "https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=#{FitBitAPIKey::CLIENT_ID}&redirect_uri=#{fitbit_callback_url}&scope=activity%20nutrition%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight"
+        redirect_to "https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=#{ENV['FITBIT_CLIENT_ID']}&redirect_uri=#{fitbit_callback_url}&scope=activity%20nutrition%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight"
       else
         flash[:alert] = 'すでに連携しています。'
         redirect_back(fallback_location: root_path)

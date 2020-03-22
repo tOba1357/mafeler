@@ -58,7 +58,7 @@ class FitbitService
     def get_access_token(fitbit_account)
       url = URI.parse('https://api.fitbit.com/oauth2/token')
       req = Net::HTTP::Post.new(url.to_s)
-      req['Authorization'] = 'Basic ' + Base64.strict_encode64("#{FitBitAPIKey::CLIENT_ID}:#{FitBitAPIKey::CLIENT_SECRET}")
+      req['Authorization'] = 'Basic ' + Base64.strict_encode64("#{ENV['FITBIT_CLIENT_ID']}:#{ENV['FITBIT_CLIENT_SECRET']}")
       req.set_form_data(
           {
               grant_type: 'refresh_token',
