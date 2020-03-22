@@ -1,0 +1,101 @@
+# Ruby CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-ruby/ for more details
+#
+version: 2
+jobs:
+  test:
+    docker:
+    - image: circleci/ruby:2.7.0-node-browsers
+    - image: circleci/postgres:10.5
+      environment:
+        POSTGRES_HOST: db
+        POSTGRES_USER: devuser
+        POSTGRES_PASSWORD: devuser
+        POSTGRES_NAME: healthdb
+
+    working_directory: ~/health
+
+    steps:
+    - checkout
+
+    # Download and cache dependencies
+    - restore_cache:
+        keys:
+        - dependencies-node-{{ checksum "yarn.lock" }}
+
+    - restore_cache:
+        keys:
+        - dependencies-gem-{{ checksum "Gemfile.lock" }}
+
+    - run:
+        name: install dependencies
+        command: |
+          bundle install --path vendor/bundle
+          yarn install
+    - save_cache:
+        paths: ./vendor/bundle
+        key: dependencies-gem-{{ checksum "Gemfile.lock" }}
+    - save_cache:
+        paths: ./node_modules
+        key: dependencies-node-{{ checksum "yarn.lock" }}
+
+    # Database setup
+    - run: RAILS_ENV="test" bundle exec rake db:create db:migrate --trace
+
+    # run tests!
+    - run:
+        name: run tests
+        command: NO_BUILD=1 bundle exec rspec
+
+  # stop auto deploy for no production environment
+  deploy:
+    docker:
+    - image: circleci/ruby:2.5.1-node-browsers
+    working_directory: ~/health
+
+    steps:
+    - checkout
+    - restore_cache:
+        keys:
+        - dependencies-node-{{ checksum "yarn.lock" }}
+
+    - restore_cache:
+        keys:
+        - dependencies-gem-{{ checksum "Gemfile.lock" }}
+
+    - run:
+        name: install dependencies
+        command: |
+          bundle install --path vendor/bundle
+          yarn install
+
+    - save_cache:
+        paths: ./vendor/bundle
+        key: dependencies-gem-{{ checksum "Gemfile.lock" }}
+
+    - save_cache:
+        paths: ./node_modules
+        key: dependencies-node-{{ checksum "yarn.lock" }}
+
+    - add_ssh_keys:
+        fingerprints:
+        - c9:b1:e1:d1:86:cd:76:1a:7f:d7:8a:34:16:ee:0f:90
+
+    - run:
+        name: deploy
+        command: SSH_KEY_PATH=~/.ssh/id_rsa_c9b1e1d186cd761a7fd78a3416ee0f90 bundle exec cap production deploy
+
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+    - test
+#    - deploy:
+#        requires:
+#          - test
+#        filters:
+#          branches:
+#            only:
+#              - master

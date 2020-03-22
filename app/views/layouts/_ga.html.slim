@@ -1,0 +1,14 @@
+- if Rails.env.production?
+  script[async src="https://www.googletagmanager.com/gtag/js?id=UA-129003776-1"]
+  javascript:
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+  - if logged_in?
+    javascript:
+      gtag('config', 'UA-129003776-1', {'user_id': #{current_user.id}});
+  - else
+    javascript:
+      gtag('config', 'UA-129003776-1');
+

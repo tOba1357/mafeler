@@ -1,0 +1,44 @@
+doctype html
+html
+  head
+    title Health
+    = csrf_meta_tags
+    meta name="viewport" content="width=device-width,initial-scale=1"
+    = render('layouts/ga')
+    = stylesheet_link_tag 'application', media: 'all'
+    link[rel="stylesheet" href="/stylesheets/bootstrap.min.css"]
+    script[src="/javascripts/fontawesome-all.js"]
+    = javascript_pack_tag 'application'
+    = stylesheet_pack_tag 'application'
+  body
+    #app
+      .overlay v-if="$store.state.common.loading"
+        img.iconLoading src=image_path('spinner.svg')
+      nav.navbar.navbar-expand-md.navbar-dark.bg-dark.mb-4
+        router-link.navbar-brand :to="{name: 'dashboard'}" Healt
+        button.navbar-toggler type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
+          span.navbar-toggler-icon
+        #navbarCollapse.collapse.navbar-collapse
+          ul.navbar-nav.mr-auto(v-if="$store.getters['authentication/loggedIn']")
+            li.nav-item
+              router-link.nav-link :to="{name: 'dashboard'}" Home
+            li.nav-item
+              router-link.nav-link :to="{name: 'diaries'}" Diary
+            li.nav-item
+              router-link.nav-link :to="{name: 'fitbit_sleeps'}" FitbitSleep
+            li.nav-item
+              router-link.nav-link :to="{name: 'fitbit_heart_rates'}" FitbitHeartRates
+            li.nav-item
+              router-link.nav-link :to="{name: 'fitbit_activities'}" FitbitActivities
+            li.nav-item
+              router-link.nav-link :to="{name: 'health_planet_innerscans'}" Innerscans
+            li.nav-item
+              router-link.nav-link :to="{name: 'chinese_medicine_diagnosis'}" ChineseMedicineDiagnosis
+            li.nav-item
+              router-link.nav-link :to="{name: 'settings'}" Settings
+      .container
+        .alert.alert-danger v-if="$store.state.common.error"
+          | {{$store.state.common.error}}
+        .alert.alert-warning v-for="warning in $store.state.common.alertWarnings" v-if='warning'
+          | {{warning}}
+        router-view
