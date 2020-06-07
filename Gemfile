@@ -34,7 +34,7 @@ gem 'kaminari'
 gem 'activerecord-import'
 gem 'whenever', require: false
 
-gem 'webpacker', '~> 4.x'
+gem 'webpacker', '~> 5.x'
 
 # oauth
 gem 'google-api-client'
