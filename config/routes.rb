@@ -29,6 +29,7 @@ Rails.application.routes.draw do
 
   namespace :fitbit do
     get '/', to: 'authenticate#show'
+    get '/webhook', to: 'webhook#index'
     resources :sleeps, only: [:index, :show] do
       get 'sync', on: :collection
     end
