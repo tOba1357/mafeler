@@ -4,8 +4,6 @@ import store from '../store'
 import router from '../router'
 
 require('bootstrap')
-require('../utils/rollbar')
-
 
 axios.defaults.headers['X-CSRF-TOKEN'] = $('meta[name=csrf-token]').attr('content')
 axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest';

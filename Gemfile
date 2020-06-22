@@ -39,7 +39,6 @@ gem 'webpacker', '~> 5.x'
 # oauth
 gem 'google-api-client'
 
-gem 'rollbar'
 gem 'config'
 
 group :development, :test do
