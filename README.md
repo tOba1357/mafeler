@@ -1,6 +1,6 @@
 # README
 ## links
-production: https://heeeealthy.com
+production: https://mafeler.herokuapp.com/
 ## How to deploy
 ### Infrastructure construction
 aws
