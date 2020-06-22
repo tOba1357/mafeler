@@ -11,6 +11,8 @@ Rails.application.routes.draw do
 
   get '/logout', to: 'sessions#destroy'
 
+  get '/webhook', to: 'webhook#verify'
+  post '/webhook', to: 'webhook#notification'
   get '*path', to: 'home#index', constraints: lambda {|req| req.format == :html}
 
   # API
@@ -29,7 +31,6 @@ Rails.application.routes.draw do
 
   namespace :fitbit do
     get '/', to: 'authenticate#show'
-    get '/webhook', to: 'webhook#index'
     resources :sleeps, only: [:index, :show] do
       get 'sync', on: :collection
     end

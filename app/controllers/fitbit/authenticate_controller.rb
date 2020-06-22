@@ -18,8 +18,15 @@ module Fitbit
     def callback
       return redirect_to root_path if params[:code].blank?
       if FitbitAuthorizationService.authorization(current_user, params[:code], fitbit_callback_url)
-        flash[:notice] = 'Fitbitと連携しました。'
-        redirect_back(fallback_location: root_path)
+        service = FitbitSubscriptionService.new(current_user.fitbit_account.reload)
+        if service.add_subscription
+          flash[:notice] = 'Fitbitと連携しました。'
+          redirect_back(fallback_location: root_path)
+        else
+          Rails.logger.error(service.errors)
+          flash[:alert] = 'Fitbitと連携に失敗しました。'
+          redirect_back(fallback_location: root_path)
+        end
       else
         flash[:alert] = 'Fitbitと連携に失敗しました。'
         redirect_back(fallback_location: root_path)
