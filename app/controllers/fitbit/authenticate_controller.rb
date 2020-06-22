@@ -1,8 +1,11 @@
 module Fitbit
   class AuthenticateController < Fitbit::ApplicationController
-    skip_before_action :associate_fitbit_account
+    skip_before_action :associate_fitbit_account, except: [:subscribe]
     def show
-      render json: fitbit_account.present?
+      render json: {
+        fitbit_connected: fitbit_account.present?,
+        fitbit_subscribed: fitbit_account&.subscribed_at.present?
+      }
     end
 
     def authenticate
@@ -30,6 +33,15 @@ module Fitbit
       else
         flash[:alert] = 'Fitbitと連携に失敗しました。'
         redirect_back(fallback_location: root_path)
+      end
+    end
+
+    def subscribe
+      service = FitbitSubscriptionService.new(fitbit_account)
+      if service.add_subscription
+        head 204
+      else
+        render json: service.errors.map(&:message).join("\n"), status: 400
       end
     end
   end
