@@ -5,14 +5,14 @@ Rails.application.routes.draw do
 
   get '/fitbit/authenticate', to: 'fitbit/authenticate#authenticate'
   get '/fitbit/callback', to: 'fitbit/authenticate#callback'
+  get '/fitbit/webhook', to: 'webhook#verify'
+  post '/fitbit/webhook', to: 'webhook#notification'
 
   get '/health_planet/authenticate', to: 'health_planet/authenticate#authenticate'
   get '/health_planet/callback', to: 'health_planet/authenticate#callback'
 
   get '/logout', to: 'sessions#destroy'
 
-  get '/webhook', to: 'webhook#verify'
-  post '/webhook', to: 'webhook#notification'
   get '*path', to: 'home#index', constraints: lambda {|req| req.format == :html}
 
   # API
