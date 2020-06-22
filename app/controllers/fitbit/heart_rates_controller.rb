@@ -15,6 +15,5 @@ module Fitbit
       @heart_rate = fitbit_account.fitbit_heart_rates.find_by!(id: params[:id])
       render json: @heart_rate
     end
-
   end
 end

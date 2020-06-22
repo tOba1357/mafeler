@@ -12,7 +12,7 @@ module Fitbit
     end
 
     def notification
-      head 404 unless check_signature?
+      return head 404 unless check_signature?
       # [
       #   {
       #     "collectionType": "foods",
@@ -21,19 +21,38 @@ module Fitbit
       #     "ownerType": "user",
       #     "subscriptionId": "1234"
       #   }, ... ]
-      # TODO: implement
-      head 204
+      begin
+        body = JSON.parse(request.body.read)
+        body.each do |row|
+          fitbit_account = FitbitAccount.find_by(id: row['subscriptionId'])
+          if fitbit_account.nil?
+            Rails.logger.warn("fitbit account not found. body: #{row}")
+            next
+          end
+          target_date = Date.parse(row['date'])
+          case body['collectionType']
+          when 'activities'
+            FitbitHeartRateService.import_heart_rates fitbit_account, target_date, target_date
+            # TODO: target date
+            FitbitActivityService.import_activities fitbit_account
+          when 'sleep'
+            FitbitSleepService.import_sleep fitbit_account, target_date, target_date
+          end
+        end
+      rescue => e
+        Rails.logger.error(e)
+        Rails.logger.error(request.body.read)
+      ensure
+        head 204
+      end
     end
 
     private
     def check_signature?
-      # TODO: delete log
-      Rails.logger.debug(request.headers['X-Fitbit-Signature'])
-      Rails.logger.debug(request.body.read)
       signature = request.headers['X-Fitbit-Signature']
       return false if signature.blank?
       hash = OpenSSL::HMAC.digest('sha1', ENV['FITBIT_CLIENT_SECRET'] + '&', request.body.read)
-      hash = Base64.encode64(hash)
+      hash = Base64.urlsafe_encode64(hash)
       signature == hash
     end
   end
