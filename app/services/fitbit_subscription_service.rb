@@ -23,8 +23,9 @@ class FitbitSubscriptionService
       end
       return true
     else
+      Rails.logger.warn("fitbit subscription failed. code: #{res.code}, body: #{res.body}")
       # define as class
-      errors.push(OpenStruct(message: 'subscription failed', response: res))
+      errors.push(OpenStruct.new(message: 'subscription failed', response: res))
       return false
     end
   end

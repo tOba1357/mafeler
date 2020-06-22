@@ -1,6 +1,7 @@
 const state = {
   loggedIn: null,
   fitbitConnected: null,
+  fitbitSubscribed: null,
   profileSaved: null,
   healthPlanetConnected: null,
 }
@@ -20,7 +21,8 @@ const actions = {
   },
   loadFitbitConnected({commit}) {
     return axios.get('/fitbit').then((response) => {
-      commit('setFitbitConnected', response.data)
+      commit('setFitbitConnected', response.data.fitbit_connected)
+      commit('setFitbitSubscribed', response.data.fitbit_subscribed)
       return response
     })
   },
@@ -44,6 +46,9 @@ const mutations = {
   },
   setFitbitConnected(state, payload) {
     state.fitbitConnected = payload
+  },
+  setFitbitSubscribed(state, payload) {
+    state.fitbitSubscribed = payload
   },
   setProfileSaved(state, payload) {
     state.profileSaved = payload
