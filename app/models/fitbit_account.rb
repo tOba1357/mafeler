@@ -19,4 +19,8 @@ class FitbitAccount < ApplicationRecord
   has_many :fitbit_sleeps, dependent: :delete_all
   has_many :fitbit_activities, dependent: :delete_all
   has_many :fitbit_heart_rates, dependent: :delete_all
+
+  def subscription_id
+    id
+  end
 end
