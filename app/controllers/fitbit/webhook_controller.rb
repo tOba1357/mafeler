@@ -30,7 +30,7 @@ module Fitbit
             next
           end
           target_date = Date.parse(row['date'])
-          case body['collectionType']
+          case row['collectionType']
           when 'activities'
             FitbitHeartRateService.import_heart_rates fitbit_account, target_date, target_date
             # TODO: target date
@@ -41,7 +41,7 @@ module Fitbit
         end
       rescue => e
         Rails.logger.error(e)
-        Rails.logger.error(e.backtrace)
+        Rails.logger.error(e.backtrace.join("\n"))
         Rails.logger.error(request.body.read)
       ensure
         head 204
