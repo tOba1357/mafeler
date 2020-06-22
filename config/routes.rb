@@ -31,6 +31,7 @@ Rails.application.routes.draw do
 
   namespace :fitbit do
     get '/', to: 'authenticate#show'
+    post '/subscription', to: 'authenticate#subscribe'
     resources :sleeps, only: [:index, :show] do
       get 'sync', on: :collection
     end
