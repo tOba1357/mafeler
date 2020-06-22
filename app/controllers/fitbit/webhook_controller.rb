@@ -41,6 +41,7 @@ module Fitbit
         end
       rescue => e
         Rails.logger.error(e)
+        Rails.logger.error(e.backtrace)
         Rails.logger.error(request.body.read)
       ensure
         head 204
