@@ -5,7 +5,7 @@ namespace :nature_remo do
       begin
         NatureRemoService.save_sensor_values nature_remo
       rescue => e
-        Rollbar.error(e)
+        # TODO: error handling
       end
     end
   end

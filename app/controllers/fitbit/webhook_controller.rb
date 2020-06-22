@@ -1,5 +1,7 @@
 module Fitbit
   class WebhookController < ActionController::Base
+    protect_from_forgery with: :null_session
+
     # https://dev.fitbit.com/build/reference/web-api/subscriptions/#verify-a-subscriber
     def verify
       if params[:verify] == ENV['FITIBT_VERIFICATION_CODE']
