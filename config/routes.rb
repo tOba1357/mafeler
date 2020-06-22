@@ -5,8 +5,8 @@ Rails.application.routes.draw do
 
   get '/fitbit/authenticate', to: 'fitbit/authenticate#authenticate'
   get '/fitbit/callback', to: 'fitbit/authenticate#callback'
-  get '/fitbit/webhook', to: 'webhook#verify'
-  post '/fitbit/webhook', to: 'webhook#notification'
+  get '/fitbit/webhook', to: 'fitbit/webhook#verify'
+  post '/fitbit/webhook', to: 'fitbit/webhook#notification'
 
   get '/health_planet/authenticate', to: 'health_planet/authenticate#authenticate'
   get '/health_planet/callback', to: 'health_planet/authenticate#callback'
