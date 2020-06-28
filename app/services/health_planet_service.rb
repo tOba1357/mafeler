@@ -12,7 +12,7 @@ class HealthPlanetService
           grant_type: 'authorization_code',
         }
       )
-      res = Net::HTTP.start(url.host, use_ssl: true) {|http| http.request(req)}
+      res = Net::HTTP.start(url.host, use_ssl: true) { |http| http.request(req) }
       case res
       when Net::HTTPSuccess
         body = JSON.parse res.body
@@ -28,15 +28,15 @@ class HealthPlanetService
       url = URI.parse('https://www.healthplanet.jp/oauth/token')
       req = Net::HTTP::Post.new(url.to_s)
       req.set_form_data(
-          {
-              client_id: ENV['HEALTH_PLANET_CLIENT_ID'],
-              client_secret: ENV['HEALTH_PLANET_CLIENT_SECRET'],
-              grant_type: 'refresh_token',
-              refresh_token: health_planet.refresh_token,
-              redirect_uri: 'https://www.healthplanet.jp/success.html',
-          }
+        {
+          client_id: ENV['HEALTH_PLANET_CLIENT_ID'],
+          client_secret: ENV['HEALTH_PLANET_CLIENT_SECRET'],
+          grant_type: 'refresh_token',
+          refresh_token: health_planet.refresh_token,
+          redirect_uri: 'https://www.healthplanet.jp/success.html',
+        }
       )
-      res = Net::HTTP.start(url.host, use_ssl: true) {|http| http.request(req)}
+      res = Net::HTTP.start(url.host, use_ssl: true) { |http| http.request(req) }
       case res
       when Net::HTTPSuccess
         return JSON.parse(res.body)['access_token']
