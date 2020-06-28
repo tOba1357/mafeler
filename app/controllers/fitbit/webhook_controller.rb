@@ -24,20 +24,7 @@ module Fitbit
       begin
         body = JSON.parse(request.body.read)
         body.each do |row|
-          fitbit_account = FitbitAccount.find_by(id: row['subscriptionId'])
-          if fitbit_account.nil?
-            Rails.logger.warn("fitbit account not found. body: #{row}")
-            next
-          end
-          target_date = Date.parse(row['date'])
-          case row['collectionType']
-          when 'activities'
-            FitbitHeartRateService.import_heart_rates fitbit_account, target_date, target_date
-            # TODO: target date
-            FitbitActivityService.import_activities fitbit_account
-          when 'sleep'
-            FitbitSleepService.import_sleep fitbit_account, target_date, target_date
-          end
+          FitbitSyncWorker.perform_async(row)
         end
       rescue => e
         Rails.logger.error(e)
