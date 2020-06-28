@@ -30,7 +30,7 @@ module Fitbit
             next
           end
           target_date = Date.parse(row['date'])
-          case body['collectionType']
+          case row['collectionType']
           when 'activities'
             FitbitHeartRateService.import_heart_rates fitbit_account, target_date, target_date
             # TODO: target date
@@ -41,6 +41,7 @@ module Fitbit
         end
       rescue => e
         Rails.logger.error(e)
+        Rails.logger.error(e.backtrace.join("\n"))
         Rails.logger.error(request.body.read)
       ensure
         head 204
@@ -52,7 +53,10 @@ module Fitbit
       signature = request.headers['X-Fitbit-Signature']
       return false if signature.blank?
       hash = OpenSSL::HMAC.digest('sha1', ENV['FITBIT_CLIENT_SECRET'] + '&', request.body.read)
-      hash = Base64.urlsafe_encode64(hash)
+      hash = Base64.strict_encode64(hash)
+      if signature != hash
+        Rails.logger.warn("not correct signature. signature: #{signature}, body: #{request.body.read}")
+      end
       signature == hash
     end
   end
