@@ -13,6 +13,12 @@ Rails.application.routes.draw do
 
   get '/logout', to: 'sessions#destroy'
 
+  require 'auth_constraint'
+  constraints lambda {|request| AuthConstraint.admin?(request) } do
+    require 'sidekiq/web'
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
   get '*path', to: 'home#index', constraints: lambda {|req| req.format == :html}
 
   # API
