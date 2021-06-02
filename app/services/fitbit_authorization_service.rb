@@ -15,13 +15,19 @@ class FitbitAuthorizationService
     res = Net::HTTP.start(url.host, use_ssl: true) {|http| http.request(req)}
     case res
     when Net::HTTPSuccess
-      body = JSON.parse res.body
-      user.create_fitbit_account(
-        {
-          refresh_token: body['refresh_token'],
-          fitbit_user_id: body['user_id']
-        }
-      )
+      if user.fitbit_account.present?
+        if user.fitbit_account.fitbit_user_id == body['user_id'] && body['refresh_token'].present?
+          user.fitbit_account.update!(body['refresh_token'])
+        end
+      else
+        body = JSON.parse res.body
+        user.create_fitbit_account(
+          {
+            refresh_token: body['refresh_token'],
+            fitbit_user_id: body['user_id']
+          }
+        )
+      end
       true
     else
       false
