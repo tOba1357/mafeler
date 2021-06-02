@@ -27,9 +27,7 @@ module Fitbit
           FitbitSyncWorker.perform_async(row)
         end
       rescue => e
-        Rails.logger.error(e)
-        Rails.logger.error(e.backtrace.join("\n"))
-        Rails.logger.error(request.body.read)
+        Rollbar.error(e)
       ensure
         head 204
       end

@@ -72,7 +72,7 @@ class FitbitService
         fitbit_account.update_column(:refresh_token, res_json['refresh_token'])
         return res_json['access_token']
       else
-        Rails.logger.error(res.message)
+        Rollbar.error(res.message, res)
         raise 'Access Token の取得に失敗しました。'
       end
     end
