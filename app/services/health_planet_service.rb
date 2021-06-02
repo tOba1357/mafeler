@@ -41,7 +41,7 @@ class HealthPlanetService
       when Net::HTTPSuccess
         return JSON.parse(res.body)['access_token']
       else
-        Rails.logger.error(res.message)
+        Rollbar.error(res.body, res)
         raise 'Access Token の取得に失敗しました。'
       end
     end

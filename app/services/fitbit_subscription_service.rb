@@ -19,11 +19,11 @@ class FitbitSubscriptionService
       when 201
         # do nothing
       else
-        Rails.logger.warn("unknown fitbit subscription response code. code: #{res.code}, body: #{res.body}")
+        Rollbar.error(res.body, res)
       end
       return true
     else
-      Rails.logger.warn("fitbit subscription failed. code: #{res.code}, body: #{res.body}")
+      Rollbar.error(res.body, res)
       # define as class
       errors.push(OpenStruct.new(message: 'subscription failed', response: res))
       return false
