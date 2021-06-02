@@ -18,7 +18,7 @@ class FitbitAuthorizationService
       body = JSON.parse res.body
       if user.fitbit_account.present?
         if user.fitbit_account.fitbit_user_id == body['user_id'] && body['refresh_token'].present?
-          user.fitbit_account.update!(body['refresh_token'])
+          user.fitbit_account.update!(refresh_token: body['refresh_token'])
         end
       else
         user.create_fitbit_account(
