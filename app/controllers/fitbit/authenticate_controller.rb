@@ -26,7 +26,6 @@ module Fitbit
           flash[:notice] = 'Fitbitと連携しました。'
           redirect_back(fallback_location: root_path)
         else
-          Rails.logger.error(service.errors)
           flash[:alert] = 'Fitbitと連携に失敗しました。'
           redirect_back(fallback_location: root_path)
         end
