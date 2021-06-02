@@ -41,7 +41,8 @@ class HealthPlanetService
       when Net::HTTPSuccess
         return JSON.parse(res.body)['access_token']
       else
-        Rollbar.error(res.body, res)
+        e = Exception.new('getting access token failed')
+        Rollbar.error(e, res)
         raise 'Access Token の取得に失敗しました。'
       end
     end

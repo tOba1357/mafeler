@@ -11,19 +11,16 @@ class FitbitSubscriptionService
     req = Net::HTTP::Post.new(url.to_s)
     req['Authorization'] = "Bearer #{access_token}"
     res = Net::HTTP.start(url.host, use_ssl: true) {|http| http.request(req)}
-    case res
-    when Net::HTTPSuccess
-      case res.code
-      when 200
-        fitbit_account.update!(subscribed_at: Time.zone.now)
-      when 201
-        # do nothing
-      else
-        Rollbar.error(res.body, res)
-      end
+    case res.code
+    when 200
+      fitbit_account.update!(subscribed_at: Time.zone.now)
+      return true
+    when 201
+      # do nothing
       return true
     else
-      Rollbar.error(res.body, res)
+      e = Exception.new('fitbit subscription failed')
+      Rollbar.error(e, res)
       # define as class
       errors.push(OpenStruct.new(message: 'subscription failed', response: res))
       return false

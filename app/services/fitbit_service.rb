@@ -72,7 +72,8 @@ class FitbitService
         fitbit_account.update_column(:refresh_token, res_json['refresh_token'])
         return res_json['access_token']
       else
-        Rollbar.error(res.message, res)
+        e = Exception.new('getting access token failed')
+        Rollbar.error(e, res)
         raise 'Access Token の取得に失敗しました。'
       end
     end
